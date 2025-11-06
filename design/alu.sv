@@ -25,6 +25,16 @@ module alu#(
                     ALUResult = SrcA | SrcB;
             4'b0011:        // XOR
                     ALUResult = SrcA ^ SrcB;
+            4'b0110:        // SUB
+                    ALUResult = SrcA - SrcB;
+            4'b1100: begin  // SLT
+                        if ($signed(SrcA) < $signed(SrcB)) begin
+                                ALUResult = 1;
+                        end
+                        else begin
+                                ALUResult = 0;
+                        end
+                     end
             default:
                     ALUResult = 0;
             endcase
