@@ -38,8 +38,24 @@ module datamemory #(
       case (Funct3)
         3'b010:  //LW
         rd <= Dataout;
+
+        // NÃO TESTADO
+        3'b000:  //LB -> lê um byte
+        rd <= Dataout[7:0];
+
+        // NÃO TESTADO
+        3'b001:  //LH -> lê 16 bits
+        rd <= Dataout[15:0];
+
+        // NÃO TESTADO
+        3'b100:  //LBU -> lê um byte e coloca em 32 bits
+        rd <= {24'b0, Dataout[7:0]};
+
         default: rd <= Dataout;
       endcase
+
+
+
     end else if (MemWrite) begin
       case (Funct3)
         3'b010: begin  //SW
