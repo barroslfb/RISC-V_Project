@@ -6,7 +6,7 @@ module alu#(
         )
         (
         input logic [DATA_WIDTH-1:0]    SrcA,
-        input logic [DATA_WIDTH-1:0]    SrcB,
+        input logic [DATA_WIDTH-1:0]    SrcB, // Immediato
 
         input logic [OPCODE_LENGTH-1:0]    Operation,
         output logic[DATA_WIDTH-1:0] ALUResult
@@ -35,9 +35,18 @@ module alu#(
                                 ALUResult = 0;
                         end
                      end
+
+                // SLTI
+
+                // ADDI
+
+                // SLLI
+
+                // SRLI
+
+                // SRAI
             default:
                     ALUResult = 0;
             endcase
         end
 endmodule
-
