@@ -19,19 +19,33 @@ module Controller (
     output logic Branch  //0: branch is not taken; 1: branch is taken
 );
 
-  logic [6:0] R_TYPE, LW, SW, BR;
+  logic [6:0] R_TYPE, LW, SW, BR, I_TYPE;
 
   assign R_TYPE = 7'b0110011;  //add,and
   assign LW = 7'b0000011;  //lw
   assign SW = 7'b0100011;  //sw
   assign BR = 7'b1100011;  //beq
+  assign I_TYPE = 7'b0010011;  // ADDI, SLTI, SLLI, SRLI, SRAI, etc.
 
-  assign ALUSrc = (Opcode == LW || Opcode == SW);
+  // ALUSrc: deve ser 1 quando usar imediato (LW, SW, ou I-type)
+  assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE);
+  
+  // MemtoReg: deve ser 1 quando escrever do DATA_MEMORY
   assign MemtoReg = (Opcode == LW);
-  assign RegWrite = (Opcode == R_TYPE || Opcode == LW);
+  
+  // RegWrite: deve ser 1 quando escrever registrador (R, LW, I-type)
+  assign RegWrite = (Opcode == R_TYPE || Opcode == LW || Opcode == I_TYPE);
+  
+  // MemRead: deve ser 1 para Load
   assign MemRead = (Opcode == LW);
+  
+  // MemWrite: deve ser 1 para Store
   assign MemWrite = (Opcode == SW);
+  
+  // ALUOp: 00=LW/SW, 01=Branch, 10=R-type/I-type
   assign ALUOp[0] = (Opcode == BR);
-  assign ALUOp[1] = (Opcode == R_TYPE);
+  assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE);
+  
+  // Branch: deve ser 1 para Branch
   assign Branch = (Opcode == BR);
 endmodule

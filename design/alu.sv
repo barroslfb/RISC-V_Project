@@ -17,7 +17,7 @@ module alu#(
             case(Operation)
             4'b0000:        // AND
                     ALUResult = SrcA & SrcB;
-            4'b0010:        // ADD
+            4'b0010:        // ADD & ADDI --> same ALU operation
                     ALUResult = SrcA + SrcB;
             4'b1000:        // Equal
                     ALUResult = (SrcA == SrcB) ? 1 : 0;
@@ -27,7 +27,7 @@ module alu#(
                     ALUResult = SrcA ^ SrcB;
             4'b0110:        // SUB
                     ALUResult = SrcA - SrcB;
-            4'b1100: begin  // SLT
+            4'b1100: begin  // SLT & SLTI --> same ALU operation
                         if ($signed(SrcA) < $signed(SrcB)) begin
                                 ALUResult = 1;
                         end
@@ -36,25 +36,18 @@ module alu#(
                         end
                      end
 
-                4'b1100: begin // SLTI
+                4'b1101: begin // SLLI (Shift Left Logical Immediate)
+                        ALUResult = SrcA << SrcB[4:0];
+                end
 
+                4'b1110: begin // SRLI (Shift Right Logical Immediate)
+                        ALUResult = SrcA >> SrcB[4:0];
+                end
+
+                4'b1111: begin // SRAI (Shift Right Arithmetic Immediate)
+                        ALUResult = $signed(SrcA) >>> SrcB[4:0];
                 end
                 
-                4'b0010: begin// ADDI
-
-                end
-
-                4'b1101: begin // SLLI
-
-                end
-
-                4'b1110: begin // SRLI
-
-                end
-
-                4'b1111: begin // SRAI
-
-                end
             default:
                     ALUResult = 0;
             endcase
