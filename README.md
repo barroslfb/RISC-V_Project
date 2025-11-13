@@ -4,6 +4,8 @@
 
 Este repositório contém os arquivos base para o projeto da disciplina Infraestrutura de Hardware (IF674) no CIn-UFPE. O objetivo do projeto é implementar instruções em um processador RISC-V usando SystemVerilog.
 
+Link do relatório: https://docs.google.com/document/d/1T8R1O_9c3NqHLNKDjyh7DKTi55nWG8Jl-WUA2K1GKP4/edit?usp=sharing
+
 ---
 
 ## 📝 Instruções
@@ -27,11 +29,11 @@ Seu objetivo é implementar as instruções restantes listadas abaixo:
 | 3  | `BNE`     |      ❌     |    ❌    |      ❌      |
 | 4  | `BLT`     |      ❌     |    ❌    |      ❌      |
 | 5  | `BGE`     |      ❌     |    ❌    |      ❌      |
-| 6  | `LB`      |      ❌     |    ❌    |      ❌      |
-| 7  | `LH`      |      ❌     |    ❌    |      ❌      |
-| 8  | `LBU`     |      ❌     |    ❌    |      ❌      |
-| 9  | `SB`      |      ❌     |    ❌    |      ❌      |
-| 10 | `SH`      |      ❌     |    ❌    |      ❌      |
+| 6  | `LB`      |      ✅     |    ✅    |      ✅      |
+| 7  | `LH`      |      ✅     |    ✅    |      ✅      |
+| 8  | `LBU`     |      ✅     |    ✅    |      ✅      |
+| 9  | `SB`      |      ✅     |    ✅    |      ✅      |
+| 10 | `SH`      |      ✅     |    ✅    |      ✅      |
 | 11 | `SLTI`    |      ❌     |    ❌    |      ❌      |
 | 12 | `ADDI`    |      ❌     |    ❌    |      ❌      |
 | 13 | `SLLI`    |      ❌     |    ❌    |      ❌      |
@@ -112,3 +114,5 @@ Existem duas maneiras de nos enviar suas sugestões:
 1. **Issue**: Abra uma issue detalhando o problema ou a melhoria proposta. Certifique-se de fornecer informações claras e específicas para facilitar a compreensão do que precisa ser corrigido ou aprimorado.
 
 2. **Pull Request**: Se você é familiarizado com o processo de pull requests, sinta-se à vontade para enviar suas alterações diretamente por meio de um pull request. Certifique-se de descrever claramente as alterações realizadas e o motivo por trás delas.
+
+
