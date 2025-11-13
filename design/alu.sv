@@ -36,15 +36,25 @@ module alu#(
                         end
                      end
 
-                // SLTI
+                4'b1100: begin // SLTI
 
-                // ADDI
+                end
+                
+                4'b0010: begin// ADDI
 
-                // SLLI
+                end
 
-                // SRLI
+                4'b1101: begin // SLLI
 
-                // SRAI
+                end
+
+                4'b1110: begin // SRLI
+
+                end
+
+                4'b1111: begin // SRAI
+
+                end
             default:
                     ALUResult = 0;
             endcase
