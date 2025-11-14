@@ -6,7 +6,7 @@ module alu#(
         )
         (
         input logic [DATA_WIDTH-1:0]    SrcA,
-        input logic [DATA_WIDTH-1:0]    SrcB, // Immediato
+        input logic [DATA_WIDTH-1:0]    SrcB, // Immediato ou registrador
 
         input logic [OPCODE_LENGTH-1:0]    Operation,
         output logic[DATA_WIDTH-1:0] ALUResult
