@@ -1,4 +1,4 @@
-timescale 1ns / 1ps
+`timescale 1ns / 1ps
 module Controller (
     // Input
     input logic [6:0] Opcode,

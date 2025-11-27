@@ -1,4 +1,4 @@
-timescale 1ns / 1ps
+`timescale 1ns / 1ps
 module ALUController (
     //Inputs
     input logic [1:0] ALUOp,   // 00:LW/SW, 01:Branch, 10:R-Type, 11:I-Type
