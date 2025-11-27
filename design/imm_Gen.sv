@@ -5,16 +5,15 @@ module imm_Gen (
     output logic [31:0] Imm_out
 );
 
-
   always_comb
     case (inst_code[6:0])
-      7'b0000011:  /*I-type load part*/
-      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
-
-      7'b0100011:  /*S-type*/
-      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:25], inst_code[11:7]};
-
-      7'b1100011:  /*B-type*/
+      7'b0000011:  /* I-type load part */
+      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};  // Load immediate
+      
+      7'b0100011:  /* S-type store part */
+      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:25], inst_code[11:7]};  // Store immediate
+      
+      7'b1100011:  /* B-type branch part */
       Imm_out = {
         inst_code[31] ? 19'h7FFFF : 19'b0,
         inst_code[31],
@@ -22,10 +21,12 @@ module imm_Gen (
         inst_code[30:25],
         inst_code[11:8],
         1'b0
-      };
+      };  // Branch immediate
 
-      default: Imm_out = {32'b0};
+      7'b0010011:  /* I-type arithmetic (ADDI, SLTI, etc.) */
+      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};  // Arithmetic immediate
 
+      default: Imm_out = {32'b0};  // Default case
     endcase
 
 endmodule
