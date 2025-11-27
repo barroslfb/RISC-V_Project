@@ -1,5 +1,4 @@
-`timescale 1ns / 1ps
-
+timescale 1ns / 1ps
 module Controller (
     // Input
     input logic [6:0] Opcode,
@@ -38,9 +37,14 @@ module Controller (
   // MemWrite: deve ser 1 para Store (SW)
   assign MemWrite = (Opcode == SW);
   
-  // ALUOp: define a operação ALU para R-type, I-type e Branch
-  assign ALUOp[0] = (Opcode == BR);  // Branch
-  assign ALUOp[1] = (Opcode == R_TYPE || Opcode == I_TYPE);  // R-type or I-type
+  // ALUOp Logic Update:
+  // 00: LW/SW
+  // 01: Branch
+  // 10: R-Type
+  // 11: I-Type (NOVO - Diferencia I-Type de R-Type)
+  
+  assign ALUOp[0] = (Opcode == BR) || (Opcode == I_TYPE);
+  assign ALUOp[1] = (Opcode == R_TYPE) || (Opcode == I_TYPE);
   
   // Branch: é 1 para instrução de Branch (BEQ)
   assign Branch = (Opcode == BR);
