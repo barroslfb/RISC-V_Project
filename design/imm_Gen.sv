@@ -7,13 +7,16 @@ module imm_Gen (
 
   always_comb
     case (inst_code[6:0])
-      7'b0000011:  /* I-type load part */
-      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};  // Load immediate
-      
-      7'b0100011:  /* S-type store part */
-      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:25], inst_code[11:7]};  // Store immediate
-      
-      7'b1100011:  /* B-type branch part */
+      7'b0010011, 7'b0000011:  /*I-type load part*/
+      if (inst_code[6:0] == 7'b0010011 && inst_code[31:25] == 7'b0100000 && inst_code[14:12] == 3'b000) // Hazard Case - ADDI and SUB
+     Imm_out = ~{inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]} + 1;
+     else
+     Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
+
+      7'b0100011:  /*S-type*/
+      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:25], inst_code[11:7]};
+
+      7'b1100011:  /*B-type*/
       Imm_out = {
         inst_code[31] ? 19'h7FFFF : 19'b0,
         inst_code[31],
@@ -21,12 +24,20 @@ module imm_Gen (
         inst_code[30:25],
         inst_code[11:8],
         1'b0
-      };  // Branch immediate
+      };
 
-      7'b0010011:  /* I-type arithmetic (ADDI, SLTI, etc.) */
-      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};  // Arithmetic immediate
+ 7'b1101111:  /*J-type JAL*/
+  Imm_out = {inst_code[31] ? 11'hFFFFF : 11'b0,
+            inst_code[31],
+            inst_code[19:12],
+            inst_code[20],
+            inst_code[30:21],
+            1'b0};
 
-      default: Imm_out = {32'b0};  // Default case
+ 7'b1100111:  /*JALR*/
+  Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
+
+      default: Imm_out = {32'b0};
     endcase
 
 endmodule

@@ -1,55 +1,49 @@
 `timescale 1ns / 1ps
 
 module alu#(
-        parameter DATA_WIDTH = 32,
-        parameter OPCODE_LENGTH = 4
+                parameter DATA_WIDTH = 32,
+                parameter OPCODE_LENGTH = 4
         )
         (
-        input logic [DATA_WIDTH-1:0]    SrcA,
-        input logic [DATA_WIDTH-1:0]    SrcB, // Immediato ou registrador
-
-        input logic [OPCODE_LENGTH-1:0]    Operation,
-        output logic[DATA_WIDTH-1:0] ALUResult
+                input logic [DATA_WIDTH-1:0]    SrcA,
+                input logic [DATA_WIDTH-1:0]    SrcB,
+                input logic [OPCODE_LENGTH-1:0] Operation,
+                output logic[DATA_WIDTH-1:0]    ALUResult
         );
-    
-        always_comb
-        begin
+   
+        always_comb begin
             case(Operation)
-            4'b0000:        // AND
-                    ALUResult = SrcA & SrcB;
-            4'b0010:        // ADD & ADDI --> same ALU operation
-                    ALUResult = SrcA + SrcB;
-            4'b1000:        // Equal
-                    ALUResult = (SrcA == SrcB) ? 1 : 0;
-            4'b0001:        // OR
-                    ALUResult = SrcA | SrcB;
-            4'b0011:        // XOR
-                    ALUResult = SrcA ^ SrcB;
-            4'b0110:        // SUB
-                    ALUResult = SrcA - SrcB;
-            4'b1100: begin  // SLT & SLTI --> same ALU operation
-                        if ($signed(SrcA) < $signed(SrcB)) begin
-                                ALUResult = 1;
-                        end
-                        else begin
-                                ALUResult = 0;
-                        end
-                     end
-
-                4'b1101: begin // SLLI (Shift Left Logical Immediate)
+                4'b0000:        // AND, ANDI
+                        ALUResult = SrcA & SrcB;
+                4'b0001:        // SUB
+                        ALUResult = $signed(SrcA) - $signed(SrcB);
+                4'b0010:        // ADD, ADDI
+                        ALUResult = $signed(SrcA) + $signed(SrcB);
+                4'b0011:        // OR, ORI  
+                        ALUResult = SrcA | SrcB;
+                4'b0100:        // XOR, XORI
+                        ALUResult = SrcA ^ SrcB;
+                4'b0101:        // SLL, SLLI
                         ALUResult = SrcA << SrcB[4:0];
-                end
-
-                4'b1110: begin // SRLI (Shift Right Logical Immediate)
+                4'b0110:        // SRL, SRLI
                         ALUResult = SrcA >> SrcB[4:0];
-                end
-
-                4'b1111: begin // SRAI (Shift Right Arithmetic Immediate)
+                4'b0111:        // SRA, SRAI
                         ALUResult = $signed(SrcA) >>> SrcB[4:0];
-                end
-                
-            default:
-                    ALUResult = 0;
+                4'b1000:        // BEQ
+                        ALUResult = SrcA == SrcB;
+                4'b1001:        // SLT, SLTI
+                        ALUResult = $signed(SrcA) < $signed(SrcB);
+                4'b1010:        // SLTU, SLTUI
+                        ALUResult = SrcA < SrcB;
+                4'b1011:        // BNE
+                        ALUResult = SrcA != SrcB;
+                4'b1100:        // BLT
+                        ALUResult = $signed(SrcA) < $signed(SrcB);
+                4'b1101:        // BGE
+                        ALUResult = $signed(SrcA) >= $signed(SrcB);
+                default:
+                        ALUResult = 0;
             endcase
         end
+
 endmodule
