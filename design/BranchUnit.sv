@@ -5,12 +5,15 @@ module BranchUnit #(
 ) (
     input logic [PC_W-1:0] Cur_PC,
     input logic [31:0] Imm,
-    input logic Branch,
+    input logic Branch,\
+    input logic Jal,
+    input logic Jalr,
     input logic [31:0] AluResult,
     output logic [31:0] PC_Imm,
     output logic [31:0] PC_Four,
     output logic [31:0] BrPC,
-    output logic PcSel
+    output logic PcSel,
+    output logic JSel
 );
 
   logic Branch_Sel;
@@ -24,5 +27,6 @@ module BranchUnit #(
 
   assign BrPC = (Branch_Sel) ? PC_Imm : 32'b0;  // Branch -> PC+Imm   // Otherwise, BrPC value is not important
   assign PcSel = Branch_Sel;  // 1:branch is taken; 0:branch is not taken(choose pc+4)
+  assign JSel = (Jal || Jalr)
 
 endmodule
