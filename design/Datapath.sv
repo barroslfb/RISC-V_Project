@@ -37,8 +37,8 @@ module Datapath #(
     output logic reade,  // read enable
     output logic [DM_ADDRESS-1:0] addr,  // address
     output logic [DATA_W-1:0] wr_data,  // write data
-    output logic [DATA_W-1:0] rd_data,  // read data
-    output logic [31:0] Imm  // Immediate value for ALU
+    output logic [DATA_W-1:0] rd_data  // read data
+    //output logic [31:0] Imm  // Immediate value for ALU
 );
 
   logic [PC_W-1:0] PC, PCPlus4, Next_PC;
@@ -124,7 +124,7 @@ module Datapath #(
   );
 
   assign reg_num = D.rd;
-  assign reg_data = WrmuxSrc;
+  assign reg_data = WB_Data;
   assign reg_write_sig = D.RegWrite;
 
   // //sign extend
@@ -133,7 +133,6 @@ module Datapath #(
       ExtImm
   );
 
-  assign Imm = ExtImm;
 
   // ID_EX_Reg B;
   always @(posedge clk) begin
@@ -200,7 +199,7 @@ module Datapath #(
 
   mux4 #(32) FAmux (
       B.RD_One,
-      WrmuxSrc,
+      WB_Data,
       C.Alu_Result,
       B.RD_One,
       FAmuxSel,
@@ -208,7 +207,7 @@ module Datapath #(
   );
   mux4 #(32) FBmux (
       B.RD_Two,
-      WrmuxSrc,
+      WB_Data,
       C.Alu_Result,
       B.RD_Two,
       FBmuxSel,
