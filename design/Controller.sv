@@ -18,12 +18,13 @@ module Controller (
     output logic [1:0] ALUOp,  //00: LW/SW; 01:Branch; 10: Rtype
     output logic Branch,  //0: branch is not taken; 1: branch is taken
     output logic Jal,
-    output logic Jalr
+    output logic Jalr,
+    output logic Halt
 );
 
 
 
-   logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, JAL, JALR;
+  logic [6:0] R_TYPE, I_TYPE, LW, SW, BR, JAL, JALR, HALT_OP;
 
   assign R_TYPE = 7'b0110011;  // ADD, AND, SUB, OR, XOR, SRL, SLL, SLT, SLTU, SRA
   assign I_TYPE = 7'b0010011;  // ADDI, ANDI, ORI, XORI, SRLI, SLLI, SLTI, SLTIU, SRAI
@@ -32,6 +33,7 @@ module Controller (
   assign BR = 7'b1100011;  // BEQ
   assign JAL = 7'b1101111;
   assign JALR = 7'b1100111;
+  assign HALT_OP = 7'b1111111; // HALT
 
   assign ALUSrc = (Opcode == LW || Opcode == SW || Opcode == I_TYPE || Opcode == JALR);
   assign MemtoReg = (Opcode == LW);
@@ -43,5 +45,6 @@ module Controller (
   assign Branch = (Opcode == BR);
   assign Jal = (Opcode == JAL);
   assign Jalr = (Opcode == JALR);
+  assign Halt = (Opcode == HALT_OP);
 
 endmodule

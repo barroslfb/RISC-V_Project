@@ -20,6 +20,7 @@ module Datapath #(
     Branch,  // Branch Enable
     Jal,  // JAL Enable
     Jalr,  // JALR Enable
+    Halt,
     input  logic [          1:0] ALUOp,
     input  logic [ALU_CC_W -1:0] ALU_CC,         // ALU Control Code ( input of the ALU )
     output logic [          6:0] opcode,
@@ -76,7 +77,7 @@ module Datapath #(
       clk,
       reset,
       Next_PC,
-      Reg_Stall,
+      (Reg_Stall | Halt), // <--- OR lógico: Hazard Stall OU Halt pelo usuário
       PC
   );
   instructionmemory instr_mem (
@@ -88,15 +89,15 @@ module Datapath #(
   // IF_ID_Reg A;
   always @(posedge clk) begin
     if ((reset) || (PcSel))   // initialization or flush
-        begin
+    begin
       A.Curr_Pc <= 0;
       A.Curr_Instr <= 0;
     end
-        else if (!Reg_Stall)    // stall
-        begin
-      A.Curr_Pc <= PC;
-      A.Curr_Instr <= Instr;
-    end
+    else if (!Reg_Stall && !Halt) // <--- Só atualiza se não estiver em Stall e não estiver em Halt
+      begin
+        A.Curr_Pc <= PC;
+        A.Curr_Instr <= Instr;
+      end
   end
 
   //--// The Hazard Detection Unit
