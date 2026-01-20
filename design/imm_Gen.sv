@@ -5,11 +5,13 @@ module imm_Gen (
     output logic [31:0] Imm_out
 );
 
-
   always_comb
     case (inst_code[6:0])
-      7'b0000011:  /*I-type load part*/
-      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
+      7'b0010011, 7'b0000011:  /*I-type load part*/
+      if (inst_code[6:0] == 7'b0010011 && inst_code[31:25] == 7'b0100000 && inst_code[14:12] == 3'b000) // Hazard Case - ADDI and SUB
+     Imm_out = ~{inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]} + 1;
+     else
+     Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
 
       7'b0100011:  /*S-type*/
       Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:25], inst_code[11:7]};
@@ -24,8 +26,18 @@ module imm_Gen (
         1'b0
       };
 
-      default: Imm_out = {32'b0};
+ 7'b1101111:  /*J-type JAL*/
+  Imm_out = {inst_code[31] ? 11'hFFFFF : 11'b0,
+            inst_code[31],
+            inst_code[19:12],
+            inst_code[20],
+            inst_code[30:21],
+            1'b0};
 
+ 7'b1100111:  /*JALR*/
+  Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
+
+      default: Imm_out = {32'b0};
     endcase
 
 endmodule

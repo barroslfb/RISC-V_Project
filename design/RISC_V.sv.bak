@@ -15,7 +15,7 @@ module riscv #(
     output logic [8:0] addr,
     output logic [DATA_W-1:0] wr_data,
     output logic [DATA_W-1:0] rd_data,
-    output logic Halt_Out
+    output logic [31:0] Imm_riscv
 );
 
   logic [6:0] opcode;
@@ -25,8 +25,9 @@ module riscv #(
   logic [6:0] Funct7;
   logic [2:0] Funct3;
   logic [3:0] Operation;
+  logic [31:0] Imm;
 
-  logic Halt_Internal;
+  assign Imm_riscv = Imm;
 
   Controller c (
       opcode,
@@ -37,9 +38,9 @@ module riscv #(
       MemWrite,
       ALUop,
       Branch,
+      ,
       Jal,
-      Jalr,
-      Halt_Internal
+      Jalr
   );
 
   ALUController ac (
@@ -60,7 +61,6 @@ module riscv #(
       Branch,
       Jal,
       Jalr,
-      Halt_Internal,
       ALUop,
       Operation,
       opcode,
@@ -75,9 +75,8 @@ module riscv #(
       rd,
       addr,
       wr_data,
-      rd_data
+      rd_data,
+      Imm
   );
-
-  assign Halt_Out = Halt_Internal; // Saída para o mundo externo
 
 endmodule
